@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Trend</title>
+</head>
+<body>
+    <h1>Google trend</h1>
+    <form action="" method="GET">
+        {% csrf_token %}
+        <div>Choose type of Trend:
+            {{ form.GG_Trend_Type }}
+            </div>
+        <div>Keyword List:
+            {{ form.Keyword_List }}
+            </div>
+
+    <button type="submit">Find</button>
+
+    </form>
+</body>
+</html>
