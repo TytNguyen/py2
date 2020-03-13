@@ -47,7 +47,7 @@ def index(request):
         else:
             response.write(type.print_head())
 
-        if (data != string.empty):
+        if (data is not None):
             transfer_into_image(data)
             transfer_into_csv(data)
             send_file_to_slack('demo.png')

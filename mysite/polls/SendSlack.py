@@ -23,7 +23,7 @@ def send_message_to_slack(text):
         print("EXCEPTION: " + str(em))
 
 def send_file_to_slack(file):
-    TOKEN = 'xoxp-980938038944-970840742289-980491059588-ab85c3dbcb369eeb21fc51b192a30931'
+    TOKEN = 'xoxp-980938038944-970840742289-998295696933-9ef2b8ca7d2fb747f5aabc6218fc6dfa'
     client = WebClient(token=TOKEN)
 
     response = client.files_upload(

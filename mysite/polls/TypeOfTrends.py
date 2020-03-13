@@ -41,6 +41,8 @@ class TypeOfTrend:
 
     # Related Topics, returns a dictionary of dataframes
     def related_topics(self, kw_list):
+        if (type(kw_list) is not list):
+            kw_list = list(kw_list)
         pytrend.build_payload(kw_list=kw_list)
         self.df = pytrend.related_topics()
 
@@ -62,9 +64,9 @@ def transfer_into_image(data):
     fig.savefig('demo.png')
 
 
-type = TypeOfTrend()
-type.interest_by_region('Coronavirus')
-type.print_head()
+# topic = TypeOfTrend()
+# topic.related_topics('Corona')
+# topic.print_value()
 # type.related_queries(['apple', 'samsung'])
 # type.print_value()
 # type.transfer_into_csv()

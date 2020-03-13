@@ -16,3 +16,4 @@ TREND_TYPE = (
 class PostForm(forms.Form):
    GG_Trend_Type = forms.ChoiceField(choices=TREND_TYPE)
    Keyword_List = forms.CharField(max_length=100)
+   Keyword = forms.CharField(max_length=100)
