@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from .SendSlack import send_file_to_slack
+from .SendSlack import send_file_to_slack, send_message_to_slack
 from .forms import PostForm
 from .TypeOfTrends import TypeOfTrend, transfer_into_image, transfer_into_csv
 import re
@@ -26,31 +26,41 @@ def index(request):
         trend = request.GET['GG_Trend_Type']
         kw = request.GET['Keyword_List']
 
-        SEP = (',', ';')
-        rsplit = re.compile("|".join(SEP)).split
-        kw_list = [s.strip() for s in rsplit(kw)]
+        if (trend == 'hot_trends') or (trend == 'gg_today_searches') or (trend == 'gg_top_charts'):
+            kw_list = kw
+        else:
+            SEP = (',', ';')
+            rsplit = re.compile("|".join(SEP)).split
+            kw_list = [s.strip() for s in rsplit(kw)]
 
-        type = TypeOfTrend()
-        func_map = {'interest_by_region': type.interest_by_region,
-                    'gg_today_searches': type.gg_today_searches,
-                    'hot_trends': type.hot_trends,
-                    'gg_keyword_suggestions': type.gg_keyword_suggestions,
-                    'gg_top_charts': type.gg_top_charts,
-                    'related_queries': type.related_queries,
-                    'related_topics': type.related_topics,
+        topic = TypeOfTrend()
+        func_map = {'interest_by_region': topic.interest_by_region,
+                    'gg_today_searches': topic.gg_today_searches,
+                    'hot_trends': topic.hot_trends,
+                    'gg_keyword_suggestions': topic.gg_keyword_suggestions,
+                    'gg_top_charts': topic.gg_top_charts,
+                    'related_queries': topic.related_queries,
+                    'related_topics': topic.related_topics,
                     }
         func_map[trend](kw_list)
-        data = type.get_df()
+        data = topic.get_df()
+
 
         if (trend == 'related_queries') or (trend == 'related_topics'):
-            response.write(type.print_value())
+            response.write(topic.print_value())
         else:
-            response.write(type.print_head())
+            response.write(topic.print_head())
 
-        if (data is not None):
+        if (trend == 'interest_by_region') or (trend == 'interest_over_time'):
             transfer_into_image(data)
             transfer_into_csv(data)
             send_file_to_slack('demo.png')
+            send_file_to_slack('demo.csv')
+        elif (trend == 'related_queries') or (trend == 'related_topics'):
+            send_message_to_slack(topic.get_value())
+        else:
+            transfer_into_csv(data)
+            send_file_to_slack('demo.csv')
 
         return response
 

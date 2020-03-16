@@ -12,7 +12,7 @@ def send_message_to_slack(text):
     from urllib import request, parse
     import json
 
-    URL = "https://hooks.slack.com/services/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"
+    URL = "https://hooks.slack.com/services/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"
     post = {"text": "{0}".format(text)}
 
     try:

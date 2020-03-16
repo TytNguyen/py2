@@ -1,5 +1,6 @@
 import pandas as pd
 from pytrends.request import TrendReq
+import matplotlib.pyplot as plt
 
 pytrend = TrendReq()
 
@@ -18,17 +19,22 @@ class TypeOfTrend:
         self.df = pytrend.trending_searches(pn=pn)
 
     # Get Google Keyword Suggestions
-    def gg_keyword_suggestions(self, keyword):
-        keywords = pytrend.suggestions(keyword=keyword)
-        self.df = pd.DataFrame(keywords)
+    # def gg_keyword_suggestions(self, keyword):
+    #     keywords = pytrend.suggestions(keyword=keyword)
+    #     self.df = pd.DataFrame(keywords)
+
+    def gg_keyword_suggestions(self, kw_list):
+        for keyword in kw_list:
+            keywords = pytrend.suggestions(keyword=keyword)
+            self.df += pd.DataFrame(keywords) + "        "
 
     # Get Google Hot Trends data
-    def gg_today_searches(self, pn):
-        self.df = pytrend.today_searches(pn=pn)
+    def gg_today_searches(self, geo):
+        self.df = pytrend.today_searches(pn=geo)
 
     # Get Google Top Charts
-    def gg_top_charts(self):
-        self.df = pytrend.top_charts(2019, hl='en-US', tz=300, geo='GLOBAL')
+    def gg_top_charts(self, geo):
+        self.df = pytrend.top_charts(2019, hl='en-US', tz=300, geo=geo)
 
     def interest_over_time(self, kw_list):
         pytrend.build_payload(kw_list=kw_list)
@@ -49,6 +55,9 @@ class TypeOfTrend:
     def get_df(self):
         return self.df
 
+    def get_value(self):
+        return self.df.values()
+
     def print_head(self):
         print(self.df.head())
 
@@ -64,7 +73,17 @@ def transfer_into_image(data):
     fig.savefig('demo.png')
 
 
-# topic = TypeOfTrend()
+topic = TypeOfTrend()
+topic.related_topics(['iphone X', 'iphone XS'])
+topic.print_value()
+#
+# df = topic.get_df()
+# print(df)
+# transfer_into_csv(df)
+# transfer_into_image(df)
+
+
+
 # topic.related_topics('Corona')
 # topic.print_value()
 # type.related_queries(['apple', 'samsung'])
