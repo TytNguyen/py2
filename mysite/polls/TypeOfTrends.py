@@ -18,15 +18,16 @@ class TypeOfTrend:
     def hot_trends(self, pn):
         self.df = pytrend.trending_searches(pn=pn)
 
-    # Get Google Keyword Suggestions
-    # def gg_keyword_suggestions(self, keyword):
-    #     keywords = pytrend.suggestions(keyword=keyword)
-    #     self.df = pd.DataFrame(keywords)
-
     def gg_keyword_suggestions(self, kw_list):
-        for keyword in kw_list:
-            keywords = pytrend.suggestions(keyword=keyword)
+        if (type(kw_list) is list):
+            for keyword in kw_list:
+                keywords = pytrend.suggestions(keyword=keyword)
+                self.df += pd.DataFrame(keywords) + "        "
+        else:
+            keywords = pytrend.suggestions(keyword=kw_list)
             self.df += pd.DataFrame(keywords) + "        "
+
+        del self.df['mid']
 
     # Get Google Hot Trends data
     def gg_today_searches(self, geo):
@@ -58,6 +59,9 @@ class TypeOfTrend:
     def get_value(self):
         return self.df.values()
 
+    def get_head(self):
+        return self.df.head()
+
     def print_head(self):
         print(self.df.head())
 
@@ -72,10 +76,10 @@ def transfer_into_image(data):
     fig = image.get_figure()
     fig.savefig('demo.png')
 
-
-topic = TypeOfTrend()
-topic.related_topics(['iphone X', 'iphone XS'])
-topic.print_value()
+#
+# topic = TypeOfTrend()
+# topic.related_queries(['song'])
+# topic.print_value()
 #
 # df = topic.get_df()
 # print(df)

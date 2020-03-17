@@ -45,22 +45,32 @@ def index(request):
         func_map[trend](kw_list)
         data = topic.get_df()
 
-
-        if (trend == 'related_queries') or (trend == 'related_topics'):
-            response.write(topic.print_value())
-        else:
-            response.write(topic.print_head())
+        response.write("<h1>Thanks for finding</h1></br>")
+        # if (trend == 'related_queries') or (trend == 'related_topics'):
+        #     response.write(topic.print_value())
+        # else:
+        #     response.write(topic.print_head())
 
         if (trend == 'interest_by_region') or (trend == 'interest_over_time'):
             transfer_into_image(data)
             transfer_into_csv(data)
+
+            send_message_to_slack("Type of trend: " + trend)
+            send_message_to_slack("Keyword find: " + kw)
+            send_message_to_slack(topic.get_df())
             send_file_to_slack('demo.png')
             send_file_to_slack('demo.csv')
         elif (trend == 'related_queries') or (trend == 'related_topics'):
+            send_message_to_slack("Type of trend: " + trend)
+            send_message_to_slack("Keyword find: " + kw)
             send_message_to_slack(topic.get_value())
         else:
             transfer_into_csv(data)
+            send_message_to_slack("Type of trend: " + trend)
+            send_message_to_slack("Keyword find: " + kw)
+            send_message_to_slack(topic.get_df())
             send_file_to_slack('demo.csv')
+
 
         return response
 
