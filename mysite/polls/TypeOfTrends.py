@@ -2,6 +2,8 @@ import pandas as pd
 from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 
+from mysite.polls.SendSlack import send_message_to_slack
+
 pytrend = TrendReq()
 
 class TypeOfTrend:
@@ -77,9 +79,10 @@ def transfer_into_image(data):
     fig.savefig('demo.png')
 
 #
-# topic = TypeOfTrend()
-# topic.related_queries(['song'])
-# topic.print_value()
+topic = TypeOfTrend()
+topic.related_queries(['song'])
+topic.print_value()
+send_message_to_slack(topic.get_value())
 #
 # df = topic.get_df()
 # print(df)
