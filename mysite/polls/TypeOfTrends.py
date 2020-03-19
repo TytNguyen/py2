@@ -83,7 +83,7 @@ topic = TypeOfTrend()
 topic.related_queries(['song'])
 topic.print_value()
 send_message_to_slack(topic.get_value())
-#
+
 # df = topic.get_df()
 # print(df)
 # transfer_into_csv(df)
